@@ -6,7 +6,7 @@ from gym.spaces import Box, Discrete
 import numpy as np
 import random
 import math
-from scipy.stats import norm
+from scipy.stats import norm, multivariate_normal
 
 
 class Drone(RobotSupervisorEnv):
@@ -39,6 +39,7 @@ class Drone(RobotSupervisorEnv):
         self.avg_pos = (0, 0)
         self.last_action = -1  # -1 for non-existing
         self.goal_pos = (0, 1)  # top of the circle
+        self.mean_reward_per_step = 0
 
     def polar_distance_to_goal(self):
         """
@@ -140,6 +141,9 @@ class Drone(RobotSupervisorEnv):
 
         return reward
 
+    def multivariate_normal_weighted(self, mean=(0, 0), cov=None, weight_x=1.0, weight_y=1.0):
+        return multivariate_normal(mean=mean, cov=cov if cov is not None else ([weight_x ** 2, 0], [0, weight_y ** 2])).pdf
+
     def get_reward(self, action=None) -> float:
         # keep_alive_reward = 1.0
         # reward = keep_alive_reward + self.calculate_velocity_projection_norm_towards_goal()  # + straight_line_penalty
@@ -150,14 +154,19 @@ class Drone(RobotSupervisorEnv):
         # w = self.get_drone_
 
         # reward = (v - c * abs(w)) * np.cos(d_theta)  # - v_max
-        if d_r < 0.1:
-            reward = +10
-        elif 0.1 < d_r < 1:
-            # doesn't get way bigger than 2
-            reward = v * np.cos(d_theta) + 10 * norm.pdf(d_r)   # - v_max
-        else: # impossible ...
-            reward = -10
-        return reward
+        # if d_r < 0.07:
+        #     goal_dist_reward = +10
+        # elif 0.07 < d_r < 1:
+        #     # doesn't get way bigger than 2
+        #     goal_dist_reward = 10 * norm.pdf(d_r, scale=0.4)  # - v_max
+        # else:  # impossible ...
+        #     goal_dist_reward = -10
+
+        # todo add something for stability in actions and more continuous ones
+
+        goal_dist_reward = self.linear_eucl_distance_reward(np.array((0, d_r)), np.array((0, 0))) * np.cos(d_theta)
+
+        return goal_dist_reward + 2
 
     def is_done(self):
         if self.episode_score > 40000:
@@ -166,7 +175,7 @@ class Drone(RobotSupervisorEnv):
         z = self.robot.getPosition()[2]
         x = self.robot.getPosition()[0]
 
-        if abs(z) > 4:
+        if abs(z) > 3:
             return True
         if abs(x) > 3:
             return True
@@ -198,7 +207,7 @@ class Drone(RobotSupervisorEnv):
         height_step = 7  # original 10
         w_up = w_hover + height_step
         w_down = w_hover - height_step
-        angle_step = 0  # original 2
+        angle_step = 0.5  # original 2
         if action == 0:
             motor_speed = w_up
         elif action == 1:
