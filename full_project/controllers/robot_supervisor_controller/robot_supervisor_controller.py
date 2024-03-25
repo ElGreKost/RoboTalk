@@ -6,6 +6,7 @@ from gym.spaces import Box, Discrete
 import numpy as np
 import random
 import math
+from scipy.stats import norm
 
 
 class Drone(RobotSupervisorEnv):
@@ -16,7 +17,7 @@ class Drone(RobotSupervisorEnv):
                                      # Note the additional -1.0 for the action
                                      high=np.array([1.0, 1.0, 4.0]),
                                      # And 4.0 here representing the maximum action index
-                                     dtype=np.float32)
+                                     dtype=np.float64)
         self.action_space = Discrete(5)
 
         self.robot = self.getSelf()  # Grab the robot reference from the supervisor to access various robot methods
@@ -39,62 +40,70 @@ class Drone(RobotSupervisorEnv):
         self.last_action = -1  # -1 for non-existing
         self.goal_pos = (0, 1)  # top of the circle
 
-    def get_polar_coords_for_network(self, current_position):
-        current_x, current_y = current_position
-        goal_x, goal_y = self.goal_pos
+    def polar_distance_to_goal(self):
+        """
+        Calculates the change in radius (d_r) and change in angle (d_theta) between two positions in polar coordinates.
+        Returns:
+            A tuple containing d_r (change in radius) and d_theta (change in angle) as floats.
+        """
+        curr_x, curr_z = self.get_drone_pos()
+        goal_x, goal_z = self.goal_pos
 
-        # Calculate radius and angle
-        dx = goal_x - current_x
-        dy = goal_y - current_y
-        radius = math.sqrt(dx ** 2 + dy ** 2)
-        angle = math.atan2(dy, dx)  # Adjust for proper quadrant handling
+        # Calculate current radius and angle
+        curr_radius = math.sqrt(curr_x ** 2 + curr_z ** 2)  # Consider z for 3D space
+        curr_angle = math.atan2(curr_x, curr_z)  # pitch
 
-        # Normalize radius and angle (0.0 to 1.0)
-        max_radius = 4.0  # You can adjust this based on your environment's maximum distance
-        max_angle = 2 * math.pi  # Maximum angle (full circle)
+        # Calculate goal radius and angle
+        goal_radius = math.sqrt(goal_x ** 2 + goal_z ** 2)  # Consider z for 3D space
+        goal_angle = math.atan2(goal_x, goal_z)  # Adjust for quadrant handling
 
-        normalized_radius = radius / max_radius
-        normalized_angle = angle / max_angle
+        # Calculate change in radius (d_r)
+        d_r = goal_radius - curr_radius
 
-        return [normalized_radius, normalized_angle]
+        # Calculate change in angle (d_theta)
+        # Handle potential angle wrapping around the circle (e.g., -pi to pi)
+        d_theta = goal_angle - curr_angle
+        d_theta = (d_theta + math.pi) % (2 * math.pi) - math.pi  # Normalize to -pi to pi range
+
+        return d_r, d_theta
 
     import numpy as np
 
-    def calculate_velocity_towards_goal(self, curr_pos, goal_pos):
-        """
-        Calculate the velocity vector needed to move from the current position towards the goal position.
+    def calc_vel_to_goal(self) -> float:
+        curr_pos_vec = np.array(self.get_drone_pos())
+        goal_pos_vec = np.array(self.goal_pos)
+        drone_vel_vec = np.array(self.get_drone_vel())
 
-        Parameters:
-        - curr_pos: Tuple[float, float], the current (x, z) position of the drone.
-        - goal_pos: Tuple[float, float], the goal (x, z) position towards which the drone should move.
-
-        Returns:
-        - velocity: Tuple[float, float], the (vx, vz) velocity components towards the goal.
-        """
-        # Convert positions to numpy arrays for vector operations
-        curr_pos_vec = np.array(curr_pos)
-        goal_pos_vec = np.array(goal_pos)
+        # Vector from current position to goal
         direction_vector = goal_pos_vec - curr_pos_vec
-        direction_unit_vector = direction_vector / np.linalg.norm(direction_vector)
 
-        # Scale the unit vector by the desired speed to get the velocity
-        velocity = direction_unit_vector * speed
+        # Projection of drone's velocity on the direction towards the goal
+        proj_on_goal = drone_vel_vec @ direction_vector / np.linalg.norm(direction_vector)
 
-        return tuple(velocity)
+        proj_on_goal_norm = np.linalg.norm(proj_on_goal)
 
-    def get_observations(self):
+        return proj_on_goal_norm
+
+    def get_drone_pos(self) -> tuple:
+        drone_x = self.robot.getPosition()[0]
+        drone_z = self.robot.getPosition()[2]
+        current_pos = (drone_x, drone_z)
+        return current_pos
+
+    def get_drone_vel(self) -> tuple:
+        drone_vx = self.robot.getVelocity()[0]
+        drone_vz = self.robot.getVelocity()[2]
+        current_vel = (drone_vx, drone_vz)
+        return current_vel
+
+    def get_observations(self) -> tuple:
         # called after every time after a step to return the result
         # Position on z-axis
         # drone_position = normalize_to_range(self.robot.getPosition()[2], 0, 2, -1.0, 1.0)
-        drone_z = self.robot.getPosition()[2]
-        drone_x = self.robot.getPosition()[0]
-        current_pos = (drone_x, drone_z)
-        d_r, d_theta = self.get_polar_coords_for_network(current_pos)
-        # drone_vz = self.robot.getVelocity()[2]
-        # drone_vx = self.robot.getVelocity()[0]
+        d_r, d_theta = self.polar_distance_to_goal()
         # drone_pitch = self.imu.getRollPitchYaw()[1]
 
-        return [d_r, d_theta, self.last_action]
+        return d_r, d_theta, self.last_action
 
     def get_default_observation(self):
         # Called every time after env.reset()
@@ -131,12 +140,23 @@ class Drone(RobotSupervisorEnv):
 
         return reward
 
-    def get_reward(self, action=None):
+    def get_reward(self, action=None) -> float:
+        # keep_alive_reward = 1.0
+        # reward = keep_alive_reward + self.calculate_velocity_projection_norm_towards_goal()  # + straight_line_penalty
         d_r, d_theta, last_action = self.get_observations()
 
-        keep_alive_reward = 4
+        # Doesn't get way bigger than 2
+        v = np.linalg.norm(self.get_drone_vel())
+        # w = self.get_drone_
 
-        reward = keep_alive_reward  # + straight_line_penalty
+        # reward = (v - c * abs(w)) * np.cos(d_theta)  # - v_max
+        if d_r < 0.1:
+            reward = +10
+        elif 0.1 < d_r < 1:
+            # doesn't get way bigger than 2
+            reward = v * np.cos(d_theta) + 10 * norm.pdf(d_r)   # - v_max
+        else: # impossible ...
+            reward = -10
         return reward
 
     def is_done(self):
@@ -178,7 +198,7 @@ class Drone(RobotSupervisorEnv):
         height_step = 7  # original 10
         w_up = w_hover + height_step
         w_down = w_hover - height_step
-        angle_step = 0.5  # original 2
+        angle_step = 0  # original 2
         if action == 0:
             motor_speed = w_up
         elif action == 1:
