@@ -31,38 +31,32 @@ class CartPoleWrapper(EnvBase):
             low=th.tensor([-4.8, -th.inf, -0.418, -th.inf], dtype=th.float64),
             high=th.tensor([4.8, th.inf, 0.418, th.inf], dtype=th.float64))})
         self.action_spec = CompositeSpec({"action": BinaryDiscreteTensorSpec(1)})
+        self.reward_spec = CompositeSpec({"reward": BoundedTensorSpec(th.tensor([0]), th.inf)})
 
     def _step(self, tensordict: TensorDictBase) -> TensorDictBase:
         # Extract the action from the tensordict
-        action = tensordict.get("action").cpu().numpy()
+        action = tensordict.get("action").detach().cpu().numpy()
         # Step the underlying environment with the extracted action
         obs, reward, term, trunc, info = self.env.step(int(action))
         done = term
         # Create a TensorDict to return, including the new observation, reward, and done flag
-        td = TensorDict({
-            "reward": th.tensor([1000], dtype=th.float32),
-            "next": TensorDict(source={
-                "done": th.tensor([done], dtype=th.bool),
-                "observation": th.tensor(obs, dtype=th.float32),
-                "reward": th.tensor([reward], dtype=th.float32),
-                "terminated": th.tensor([done], dtype=th.bool),
-                "truncated": th.tensor([done], dtype=th.bool)
-            }, batch_size=[]),
+        out = TensorDict({
+            "done": th.tensor([done], dtype=th.bool),
+            "observation": th.tensor(obs, dtype=th.float32),
+            "reward": th.tensor([reward], dtype=th.float32),
         }, batch_size=[])
-        return td
+        return out
 
     def _reset(self, tensordict: Optional[TensorDictBase] = None, **kwargs) -> TensorDictBase:
         # Reset the underlying environment and get the initial observation
         obs = self.env.reset()[0]
         # Create a TensorDict for the initial state
-        td = TensorDict(source={
+        out = TensorDict({
             "observation": th.tensor(obs, dtype=th.float32),
             "action": th.tensor([0], dtype=th.float32),  # Placeholder action
             "done": th.tensor([False], dtype=th.bool),
-            "terminated": th.tensor([False], dtype=th.bool),
-            "truncated": th.tensor([False], dtype=th.bool)
         }, batch_size=[])
-        return td
+        return out
 
     def _set_seed(self, seed: Optional[int]):  # for reproduction of same results
         pass

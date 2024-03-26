@@ -10,9 +10,9 @@ class Drone(RobotSupervisorEnv):
     def __init__(self):
         super().__init__()
         # Define agent's observation space using Gym's Box, setting the lowest and highest possible values
-        self.observation_space = Box(low=np.array([0.0, 0.0, -1.0]),
+        self.observation_space = Box(low=np.array([0.0, -np.pi, -1.0]),
                                      # Note the additional -1.0 for the action
-                                     high=np.array([1.0, 1.0, 4.0]),
+                                     high=np.array([4.0, np.pi, 4.0]),
                                      # And 4.0 here representing the maximum action index
                                      dtype=np.float64)
         self.action_space = Discrete(5)
