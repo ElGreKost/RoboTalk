@@ -144,7 +144,7 @@ class Drone(RobotSupervisorEnv):
     def get_reward(self, action=None) -> float:
         # keep_alive_reward = 1.0
         # reward = keep_alive_reward + self.calculate_velocity_projection_norm_towards_goal()  # + straight_line_penalty
-        d_r, d_theta, last_action = self.get_observations()
+        d_r, d_theta, _ = self.get_observations()
 
         # Doesn't get way bigger than 2
         v = np.linalg.norm(self.get_drone_vel())

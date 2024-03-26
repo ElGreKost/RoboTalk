@@ -18,11 +18,15 @@ class DroneWrapper(EnvBase):
         # obs = d_r, d_theta, last_action
         self.observation_spec = CompositeSpec({"observation": BoundedTensorSpec(
             low=th.tensor([0.0, -np.pi, -1.0], dtype=th.float64),
-            high=th.tensor([3.0, np.pi, +4.0], dtype=th.float64))})
+            high=th.tensor([4.0, np.pi, +4.0], dtype=th.float64)
+        )}, shape=(3,))
+        # print(self.observation_spec.shape[-1])
         self.action_spec = CompositeSpec({"action": BoundedTensorSpec(
             low=th.tensor([-1], dtype=th.int),
-            high=th.tensor([4], dtype=th.int)
+            high=th.tensor([4], dtype=th.int),
         )})
+        self.state_spec = self.observation_spec.clone()
+        self.reward_spec = CompositeSpec({"reward": UnboundedContinuousTensorSpec(shape=(1,))})
 
     def _step(self, tensordict: TensorDictBase) -> TensorDictBase:
         action = tensordict.get("action").detach().cpu().numpy()
@@ -36,8 +40,8 @@ class DroneWrapper(EnvBase):
 
     def _reset(self, tensordict: Optional[TensorDictBase] = None, **kwargs) -> TensorDictBase:
         # Reset the underlying environment and get the initial observation
-        obs = self.env.reset()[0]
-        print(obs)
+        obs = self.env.reset()
+        # print(obs)
         # Create a TensorDict for the initial state
         out = TensorDict({
             "observation": th.tensor(obs, dtype=th.float32),
