@@ -433,12 +433,12 @@ def _make_spec(self, td_params):
     self.state_spec = self.observation_spec.clone()
     # action-spec will be automatically wrapped in input_spec when
     # `self.action_spec = spec` will be called supported
-    self.action_spec = BoundedTensorSpec(
+    self.action_spec = CompositeSpec({BoundedTensorSpec(
         low=-td_params["params", "max_torque"],
         high=td_params["params", "max_torque"],
         shape=(1,),
         dtype=torch.float32,
-    )
+    )},[])
     self.reward_spec = UnboundedContinuousTensorSpec(shape=(*td_params.shape, 1))
 
 

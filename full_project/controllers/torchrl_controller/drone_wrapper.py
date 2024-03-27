@@ -5,7 +5,7 @@ import numpy as np
 import torch as th
 from tensordict import TensorDictBase, TensorDict
 from torchrl.envs import EnvBase, step_mdp
-from torchrl.data import UnboundedContinuousTensorSpec, CompositeSpec, BoundedTensorSpec
+from torchrl.data import UnboundedContinuousTensorSpec, CompositeSpec, BoundedTensorSpec, OneHotDiscreteTensorSpec
 
 
 class DroneWrapper(EnvBase):
@@ -19,14 +19,11 @@ class DroneWrapper(EnvBase):
         self.observation_spec = CompositeSpec({"observation": BoundedTensorSpec(
             low=th.tensor([0.0, -np.pi, -1.0], dtype=th.float64),
             high=th.tensor([4.0, np.pi, +4.0], dtype=th.float64)
-        )}, shape=(3,))
+        )},)
         # print(self.observation_spec.shape[-1])
-        self.action_spec = CompositeSpec({"action": BoundedTensorSpec(
-            low=th.tensor([-1], dtype=th.int),
-            high=th.tensor([4], dtype=th.int),
-        )})
+        self.action_spec = CompositeSpec({"action": OneHotDiscreteTensorSpec(6)})
         self.state_spec = self.observation_spec.clone()
-        self.reward_spec = CompositeSpec({"reward": UnboundedContinuousTensorSpec(shape=(1,))})
+        self.reward_spec = UnboundedContinuousTensorSpec(shape=(1,))
 
     def _step(self, tensordict: TensorDictBase) -> TensorDictBase:
         action = tensordict.get("action").detach().cpu().numpy()
@@ -50,38 +47,6 @@ class DroneWrapper(EnvBase):
         }, batch_size=[])
         return out
 
-    def _set_seed(self, seed: Optional[int]):  # for test reproduction
-        pass
-        # self.env.seed(seed)  # Assuming the underlying env has a seed method
-
-
-if __name__ == "__name__":
-    gym_env = gym.make('CartPole-v1')
-    env = DroneWrapper(gym_env)
-
-    reset_td = env.reset()
-
-    td = TensorDict(source={
-        "action": th.tensor(0, dtype=th.float32),
-        "done": th.tensor(False, dtype=th.bool),
-        "next": TensorDict(source={
-            "done": th.tensor(False, dtype=th.bool),
-            "observation": th.tensor(0, dtype=th.float32),
-            "reward": th.tensor(10, dtype=th.float32),
-            "terminated": th.tensor(False, dtype=th.bool),
-            "truncated": th.tensor(False, dtype=th.bool)
-        }, batch_size=[]),
-        "reward": th.tensor(5, dtype=th.float32),
-        "observation": th.tensor(0, dtype=th.float32),
-        "terminated": th.tensor(False, dtype=th.bool),
-        "truncated": th.tensor(False, dtype=th.bool)
-    }, batch_size=[])
-
-    step_td = env.step(td)
-    env.rollout(3)
-
-    reset_with_action = env.rand_action(reset_td)
-    reset_with_action["action"]
-
-    data = step_mdp(step_td)
-    data
+    def _set_seed(self, seed: Optional[int]):
+        rng = th.manual_seed(seed)
+        self.rng = rng
