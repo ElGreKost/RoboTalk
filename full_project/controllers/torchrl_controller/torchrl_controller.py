@@ -10,7 +10,7 @@ import torch as th
 from torch.distributions import Normal
 from torch.optim import Adam
 
-from torchrl.envs import TransformedEnv, StepCounter
+from torchrl.envs import TransformedEnv, StepCounter, Compose, ObservationNorm
 from torchrl.modules import MLP, EGreedyModule, QValueActor
 from torchrl.collectors import SyncDataCollector
 from torchrl.data import LazyTensorStorage, ReplayBuffer
@@ -22,8 +22,10 @@ from tensordict.nn.distributions import NormalParamExtractor
 from tensordict.nn import TensorDictModule as Mod, TensorDictSequential as Seq
 
 drone_env = Drone()
-env = TransformedEnv(DroneWrapper(drone_env), StepCounter())
+env = TransformedEnv(DroneWrapper(drone_env), Compose(ObservationNorm(in_keys=["observation"]), StepCounter()))
 env.set_seed(0)
+env.transform[0].init_stats(num_iter=1000, reduce_dim=0, cat_dim=0)
+# print("normalization constant shape:", env.transform[0].loc)
 
 value_mlp = MLP(out_features=env.action_spec.shape[-1], num_cells=[64, 64])
 value_net = Mod(value_mlp, in_keys=["observation"], out_keys=["action_value"])
@@ -39,10 +41,10 @@ collector = SyncDataCollector(
     env,
     policy,
     frames_per_batch=frames_per_batch,
-    total_frames=-1,
+    total_frames=1_000_000,
     init_random_frames=init_rand_steps
 )
-rb = ReplayBuffer(storage=LazyTensorStorage(100_000))
+rb = ReplayBuffer(storage=LazyTensorStorage(1_000_000))
 
 # Loss Module and Optimization
 
@@ -58,7 +60,9 @@ logger = CSVLogger(exp_name="dqn", log_dir=path)
 total_count = 0
 total_episodes = 0
 t0 = time.time()
+print('starting loop')
 for i, data in enumerate(collector):
+    print(data)
     # Write data in rb
     rb.extend(data)
     max_length = rb[:]['next', 'step_count'].max()
@@ -89,57 +93,5 @@ torchrl_logger.info(
 )
 
 # Save recording
-env.rollout(max_steps=1000, policy=policy)
+# env.rollout(max_steps=1000, policy=policy)
 
-# reset_td = env.reset()
-# env.rollout(3)
-# print(reset_td.items())
-#
-# module = th.nn.LazyLinear(env.action_spec.shape[-1])
-# policy = TensorDictModule(
-#     module,
-#     in_keys=["observation"],
-#     out_keys=["actions"],
-# )
-#
-# rollout = env.rollout(max_steps=1, policy=policy)
-# print(rollout)
-# print(f'reset_td is: {reset_td}')
-
-
-# policy = Actor(module)
-# rollout = env.rollout(max_steps=10, policy=policy)
-# print(rollout)
-
-# n_obs = env.observation_spec["observation"].shape[-1]
-# n_act = env.action_spec.shape[-1]
-#
-# print(n_obs, n_act)
-# actor = Actor(MLP(in_features=n_obs, out_features=n_act, num_cells=[32, 32]))
-# value_net = ValueOperator(
-#     MLP(in_features=n_obs + n_act, out_features=1, num_cells=[32, 32]),
-#     in_keys=["observation", "action"],
-# )
-#
-# ddpg_loss = DDPGLoss(actor_network=actor, value_network=value_net)
-#
-# rollout = env.rollout(max_steps=100, policy=actor)
-# loss_vals = ddpg_loss(rollout)
-# print(loss_vals)
-#
-# total_loss = 0
-# for key, val in loss_vals.items():
-#     if key.startswith("loss_"):
-#         total_loss += val
-#
-#
-# optim = Adam(ddpg_loss.parameters())
-# total_loss.backward()
-#
-# optim.step()
-# optim.zero_grad()
-#
-#
-# updater = SoftUpdate(ddpg_loss, eps=0.99)
-#
-# updater.step()
