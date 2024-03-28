@@ -26,7 +26,7 @@ class DroneWrapper(EnvBase):
         self.reward_spec = UnboundedContinuousTensorSpec(shape=(1,))
 
     def _step(self, tensordict: TensorDictBase) -> TensorDictBase:
-        action = tensordict.get("action").detach().cpu().numpy()
+        action = [np.argmax(tensordict.get("action").detach().cpu().numpy())]    # has to be in a list for drone_env
         obs, reward, done, info = self.env.step(action)
         out = TensorDict({
             "done": th.tensor([done], dtype=th.bool),
