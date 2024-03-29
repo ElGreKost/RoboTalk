@@ -1,0 +1,71 @@
+{
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": false,
+  "contributors": [
+    {
+      "login": "ManosMagnus",
+      "name": "Manos Kirtas",
+      "avatar_url": "https://avatars.githubusercontent.com/u/10010230?v=4",
+      "profile": "http://eakirtas.webpages.auth.gr/",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "tsampazk",
+      "name": "Kostas Tsampazis",
+      "avatar_url": "https://avatars.githubusercontent.com/u/27914645?v=4",
+      "profile": "https://github.com/tsampazk",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "KelvinYang0320",
+      "name": "Jiun Kai Yang",
+      "avatar_url": "https://avatars.githubusercontent.com/u/49781698?v=4",
+      "profile": "https://www.linkedin.com/in/kelvin-yang-b7b508198/",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "MentalGear",
+      "name": "MentalGear",
+      "avatar_url": "https://avatars.githubusercontent.com/u/2837147?v=4",
+      "profile": "https://github.com/MentalGear",
+      "contributions": [
+        "ideas"
+      ]
+    },
+    {
+      "login": "DreamtaleCore",
+      "name": "Dreamtale",
+      "avatar_url": "https://avatars.githubusercontent.com/u/12713528?v=4",
+      "profile": "https://github.com/DreamtaleCore",
+      "contributions": [
+        "bug"
+      ]
+    },
+    {
+      "login": "NickKok",
+      "name": "Nikolaos Kokkinis-Ntrenis",
+      "avatar_url": "https://avatars.githubusercontent.com/u/8222731?v=4",
+      "profile": "https://nickkok.github.io/my-website/",
+      "contributions": [
+        "code",
+        "doc",
+        "ideas"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7,
+  "projectName": "deepbots",
+  "projectOwner": "aidudezzz",
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "skipCi": true
+}
