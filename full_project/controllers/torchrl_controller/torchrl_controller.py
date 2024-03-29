@@ -40,11 +40,11 @@ optim_steps = 10
 collector = SyncDataCollector(
     env,
     policy,
-    frames_per_batch=frames_per_batch,
-    total_frames=-1,
+    frames_per_batch=frames_per_batch,  # what difference does this make?
+    total_frames=-1,    # # what difference does this make?
     init_random_frames=init_rand_steps
 )
-rb = ReplayBuffer(storage=LazyTensorStorage(5_000))
+rb = ReplayBuffer(storage=LazyTensorStorage(5_000), batch_size=128)
 
 # Loss Module and Optimization
 
@@ -56,13 +56,13 @@ updater = SoftUpdate(loss, eps=0.99)
 path = "./training_loop"
 logger = CSVLogger(exp_name="dqn", log_dir=path)
 
-# Main Loop
+# Main Loop# what difference does this make?
 total_count = 0
 total_episodes = 0
 t0 = time.time()
 print('starting loop')
 for i, data in enumerate(collector):
-    print('outer loop')
+    print('total_count:', total_count, 'total_episodes:', total_episodes)
     # print(data)
     # Write data in rb
     rb.extend(data)
@@ -70,7 +70,7 @@ for i, data in enumerate(collector):
     if len(rb) > init_rand_steps:
         print('enough rb collected frames')
         for _ in range(optim_steps):
-            sample = rb.sample(128)
+            sample = rb.sample()
             loss_vals = loss(sample)
             loss_vals["loss"].backward()
             optim.step()

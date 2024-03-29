@@ -15,7 +15,7 @@ class Drone(RobotSupervisorEnv):
                                      high=np.array([4.0, np.pi, 4.0]),
                                      # And 4.0 here representing the maximum action index
                                      dtype=np.float64)
-        self.action_space = Discrete(5)
+        self.action_space = Discrete(6)
 
         self.robot = self.getSelf()  # Grab the robot reference from the supervisor to access various robot methods
         self.imu = self.getDevice("imu")
@@ -131,15 +131,39 @@ class Drone(RobotSupervisorEnv):
 
     def linear_eucl_distance_reward(self, desired_pos, current_pos, max_rew=100, scale=20):
         goal_distance = np.linalg.norm(current_pos - desired_pos)
-        if goal_distance < 0.1:
+        if goal_distance < 0.05:
             reward = max_rew
         else:
-            reward = max_rew / 5 - scale * goal_distance
+            reward = max_rew / 50 - scale * goal_distance
 
         return reward
 
     def multivariate_normal_weighted(self, mean=(0, 0), cov=None, weight_x=1.0, weight_y=1.0):
         return multivariate_normal(mean=mean, cov=cov if cov is not None else ([weight_x ** 2, 0], [0, weight_y ** 2])).pdf
+
+    # GPT EXAMPLE REWARD FUNC
+    # def calculate_reward(altitude, pitch, horizontal_velocity, vertical_velocity, loop_completed):
+    #     reward = 0
+    #     target_altitude, target_pitch = get_target_altitude_and_pitch()
+    #
+    #     # Altitude reward
+    #     altitude_error = abs(target_altitude - altitude)
+    #     reward -= altitude_error * ALTITUDE_WEIGHT
+    #
+    #     # Orientation reward
+    #     pitch_error = abs(target_pitch - pitch)
+    #     reward -= pitch_error * PITCH_WEIGHT
+    #
+    #     # Velocity rewards
+    #     reward -= abs(horizontal_velocity) * HORIZONTAL_VELOCITY_WEIGHT  # penalize horizontal movement
+    #     vertical_velocity_error = abs(target_vertical_velocity - vertical_velocity)
+    #     reward -= vertical_velocity_error * VERTICAL_VELOCITY_WEIGHT
+    #
+    #     # Loop completion reward
+    #     if loop_completed:
+    #         reward += LOOP_COMPLETION_BONUS
+    #
+    #     return reward
 
     def get_reward(self, action=None) -> float:
         # keep_alive_reward = 1.0
@@ -150,20 +174,11 @@ class Drone(RobotSupervisorEnv):
         v = np.linalg.norm(self.get_drone_vel())
         # w = self.get_drone_
 
-        # reward = (v - c * abs(w)) * np.cos(d_theta)  # - v_max
-        # if d_r < 0.07:
-        #     goal_dist_reward = +10
-        # elif 0.07 < d_r < 1:
-        #     # doesn't get way bigger than 2
-        #     goal_dist_reward = 10 * norm.pdf(d_r, scale=0.4)  # - v_max
-        # else:  # impossible ...
-        #     goal_dist_reward = -10
-
         # todo add something for stability in actions and more continuous ones
 
         goal_dist_reward = self.linear_eucl_distance_reward(np.array((0, d_r)), np.array((0, 0))) * np.cos(d_theta)
 
-        return goal_dist_reward + 2
+        return goal_dist_reward + .2
 
     def is_done(self):
         if self.episode_score > 40000:
