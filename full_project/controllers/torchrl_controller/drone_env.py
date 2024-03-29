@@ -2,7 +2,7 @@ import math
 
 import numpy as np
 from deepbots.supervisor import RobotSupervisorEnv
-from gym.spaces import Box, Discrete
+from gymnasium.spaces import Box, Discrete
 from scipy.stats import multivariate_normal
 
 
@@ -16,6 +16,7 @@ class Drone(RobotSupervisorEnv):
                                      # And 4.0 here representing the maximum action index
                                      dtype=np.float64)
         self.action_space = Discrete(6)
+        self.reward_space = Box(low=-np.inf, high=np.inf, shape=())  # Empty shape for single reward value
 
         self.robot = self.getSelf()  # Grab the robot reference from the supervisor to access various robot methods
         self.imu = self.getDevice("imu")
