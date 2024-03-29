@@ -1,5 +1,4 @@
 from torch import nn
-#me gamane oi alvanoi
 
 class DQN(nn.Module):
     def __init__(self, observation_shape, action_size, use_conv=True):
