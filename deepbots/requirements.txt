@@ -1,2 +1,4 @@
 gym
 tensorboardX
+torchrl
+gymnasium
