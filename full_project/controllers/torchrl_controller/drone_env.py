@@ -179,7 +179,7 @@ class Drone(RobotSupervisorEnv):
 
         goal_dist_reward = self.linear_eucl_distance_reward(np.array((0, d_r)), np.array((0, 0))) * np.cos(d_theta)
 
-        return goal_dist_reward + .2
+        return goal_dist_reward + 0.2
 
     def is_done(self):
         if self.episode_score > 40000:

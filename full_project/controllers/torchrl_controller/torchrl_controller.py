@@ -84,8 +84,8 @@ for i, data in enumerate(collector):
             total_count += data.numel()
             total_episodes += data['next', 'done'].sum()
 
-    if max_length > 4000:
-        break   # truncate it
+    if max_length > 6000:
+        break   # Finish Training
 
 
 t1 = time.time()
