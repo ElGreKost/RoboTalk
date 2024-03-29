@@ -1,24 +1,22 @@
-from deepbots.supervisor.controllers.robot_supervisor_env import RobotSupervisorEnv
-from utilities import normalize_to_range
-from PPO_agent import PPOAgent, Transition
-
-from gym.spaces import Box, Discrete
-import numpy as np
-import random
 import math
-from scipy.stats import norm, multivariate_normal
+
+import numpy as np
+from deepbots.supervisor import RobotSupervisorEnv
+from gymnasium.spaces import Box, Discrete
+from scipy.stats import multivariate_normal
 
 
 class Drone(RobotSupervisorEnv):
     def __init__(self):
         super().__init__()
         # Define agent's observation space using Gym's Box, setting the lowest and highest possible values
-        self.observation_space = Box(low=np.array([0.0, 0.0, -1.0]),
+        self.observation_space = Box(low=np.array([0.0, -np.pi, -1.0]),
                                      # Note the additional -1.0 for the action
-                                     high=np.array([1.0, 1.0, 4.0]),
+                                     high=np.array([4.0, np.pi, 4.0]),
                                      # And 4.0 here representing the maximum action index
                                      dtype=np.float64)
-        self.action_space = Discrete(5)
+        self.action_space = Discrete(6)
+        self.reward_space = Box(low=-np.inf, high=np.inf, shape=())  # Empty shape for single reward value
 
         self.robot = self.getSelf()  # Grab the robot reference from the supervisor to access various robot methods
         self.imu = self.getDevice("imu")
@@ -134,39 +132,54 @@ class Drone(RobotSupervisorEnv):
 
     def linear_eucl_distance_reward(self, desired_pos, current_pos, max_rew=100, scale=20):
         goal_distance = np.linalg.norm(current_pos - desired_pos)
-        if goal_distance < 0.1:
+        if goal_distance < 0.05:
             reward = max_rew
         else:
-            reward = max_rew / 5 - scale * goal_distance
+            reward = max_rew / 50 - scale * goal_distance
 
         return reward
 
     def multivariate_normal_weighted(self, mean=(0, 0), cov=None, weight_x=1.0, weight_y=1.0):
         return multivariate_normal(mean=mean, cov=cov if cov is not None else ([weight_x ** 2, 0], [0, weight_y ** 2])).pdf
 
+    # GPT EXAMPLE REWARD FUNC
+    # def calculate_reward(altitude, pitch, horizontal_velocity, vertical_velocity, loop_completed):
+    #     reward = 0
+    #     target_altitude, target_pitch = get_target_altitude_and_pitch()
+    #
+    #     # Altitude reward
+    #     altitude_error = abs(target_altitude - altitude)
+    #     reward -= altitude_error * ALTITUDE_WEIGHT
+    #
+    #     # Orientation reward
+    #     pitch_error = abs(target_pitch - pitch)
+    #     reward -= pitch_error * PITCH_WEIGHT
+    #
+    #     # Velocity rewards
+    #     reward -= abs(horizontal_velocity) * HORIZONTAL_VELOCITY_WEIGHT  # penalize horizontal movement
+    #     vertical_velocity_error = abs(target_vertical_velocity - vertical_velocity)
+    #     reward -= vertical_velocity_error * VERTICAL_VELOCITY_WEIGHT
+    #
+    #     # Loop completion reward
+    #     if loop_completed:
+    #         reward += LOOP_COMPLETION_BONUS
+    #
+    #     return reward
+
     def get_reward(self, action=None) -> float:
         # keep_alive_reward = 1.0
         # reward = keep_alive_reward + self.calculate_velocity_projection_norm_towards_goal()  # + straight_line_penalty
-        d_r, d_theta, last_action = self.get_observations()
+        d_r, d_theta, _ = self.get_observations()
 
         # Doesn't get way bigger than 2
         v = np.linalg.norm(self.get_drone_vel())
         # w = self.get_drone_
 
-        # reward = (v - c * abs(w)) * np.cos(d_theta)  # - v_max
-        # if d_r < 0.07:
-        #     goal_dist_reward = +10
-        # elif 0.07 < d_r < 1:
-        #     # doesn't get way bigger than 2
-        #     goal_dist_reward = 10 * norm.pdf(d_r, scale=0.4)  # - v_max
-        # else:  # impossible ...
-        #     goal_dist_reward = -10
-
         # todo add something for stability in actions and more continuous ones
 
         goal_dist_reward = self.linear_eucl_distance_reward(np.array((0, d_r)), np.array((0, 0))) * np.cos(d_theta)
 
-        return goal_dist_reward + 2
+        return goal_dist_reward + 0.2
 
     def is_done(self):
         if self.episode_score > 40000:
@@ -233,85 +246,3 @@ class Drone(RobotSupervisorEnv):
             self.motors[1].setVelocity(w_hover - angle_step)
             self.motors[2].setVelocity(w_hover + angle_step)
             self.motors[3].setVelocity(w_hover + angle_step)
-
-
-env = Drone()
-
-agent = PPOAgent(number_of_inputs=env.observation_space.shape[0], number_of_actor_outputs=env.action_space.n)
-# agent.load_weights('Episode300PlusV1.pth')
-solved = False
-episode_count = 0
-episode_limit = 10000
-# Run outer loop until the episodes limit is reached or the task is solved
-while not solved and episode_count < episode_limit:
-    observation = env.reset()  # Reset robot and get starting observation
-
-    motor_speed = 558.586 + random.randint(0, 4) * 10
-    # motor_speed = 1000
-
-    # env.episode_score = 0.0
-    # observation = env.reset()
-    # pre-trained run
-    # agent_0 = PPOAgent(number_of_inputs=env.observation_space.shape[0], number_of_actor_outputs=env.action_space.n)
-    # agent_0.load_weights('Trained_Lift_Off.pth')
-    # while True:
-    #     selected_action, action_prob = agent_0.work(observation, type_="selectActionMax")
-    #     observation, _, done, _ = env.step([selected_action])
-    #     if done:
-    #         observation = env.reset()
-    #     if env.robot.getVelocity()[2] < 0.1 and abs(env.robot.getPosition()[2] - 1) < 0.05:
-    #         print("Deploying Training")
-    #         break
-
-    for i in range(len(env.motors)):
-        env.motors[i].setPosition(float('inf'))
-        env.motors[i].setVelocity(motor_speed)
-
-    env.episode_score = 0
-
-    time_counter = 0
-
-    for step in range(2 * env.steps_per_episode):
-        time_counter += 1
-        # In training mode, the agent samples from the probability distribution, naturally implementing exploration
-        selected_action, action_prob = agent.work(observation, type_="selectAction")
-        # print(action_prob)
-        # Step the supervisor to get the current selected_action's reward, the new observation and whether we reached
-        # the done condition
-        new_observation, reward, done, info = env.step([selected_action])
-
-        # Save the current state transition in agent's memory
-        trans = Transition(observation, selected_action, action_prob, reward, new_observation)
-        agent.store_transition(trans)
-
-        if done:
-            # Save the episode's score
-            env.episode_score_list.append(env.episode_score)
-            # why does the batch-size change dynamically? The better the performance, the more important the past?
-            agent.train_step(batch_size=step + 1)
-            solved = env.solved()  # Check whether the task is solved
-            break
-
-        env.episode_score += reward  # Accumulate episode reward
-        observation = new_observation  # observation for next step is current step's new_observation
-    print("Episode #", episode_count, "score:", env.episode_score)
-    episode_count += 1  # Increment episode counter
-
-    if episode_count > 300:
-        agent.save_weights('Episode300PlusV1.pth')
-
-    # print(time_counter)
-
-if not solved:
-    print("Task is not solved, deploying agent for testing...")
-elif solved:
-    print("Task is solved, deploying agent for testing...")
-    # agent.save_weights('Trained_Lift_Off.pth')
-
-observation = env.reset()
-env.episode_score = 0.0
-while True:
-    selected_action, action_prob = agent.work(observation, type_="selectActionMax")
-    observation, _, done, _ = env.step([selected_action])
-    if done:
-        observation = env.reset()

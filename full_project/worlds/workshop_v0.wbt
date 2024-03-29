@@ -10,10 +10,10 @@ WorldInfo {
   }
 }
 Viewpoint {
-  orientation 0.07966573330178461 0.07887303286510174 -0.9936963397457743 1.5871193807709632
-  position -0.040813456497106326 10.199165894947582 3.4830422324504156
+  orientation 0.17152773171417762 0.17152773171417768 -0.9701321943456872 1.6011146149123774
+  position 8.420553004483057e-15 7.7502370472865545 2.8729949022303467
   follow "icarus"
-  followType "None"
+  followType "Pan and Tilt Shot"
 }
 TexturedBackground {
   texture "noon_park_empty"
@@ -24,31 +24,16 @@ DEF props Group {
   children [
     RectangleArena {
       rotation 0 1 0 0
-      floorSize 10 10
+      floorSize 5 5
       floorAppearance Parquetry {
         type "light strip"
       }
       wallThickness 0.1
     }
-    Solid {
-      translation 0 -2.5 2.2
-      rotation 1 0 0 -1.5707953071795862
-      children [
-        Shape {
-          appearance PBRAppearance {
-            baseColor 1 0 0
-          }
-          geometry Cylinder {
-            height 0.1
-            radius 2
-          }
-        }
-      ]
-    }
   ]
 }
 DEF _ Robot {
-  translation 0 0 0.05
+  translation 0 0 0.0495096
   children [
     Accelerometer {
     }
@@ -235,6 +220,6 @@ DEF _ Robot {
       0 0 0
     ]
   }
-  controller "torchrl_controller"
+  controller "robot_supervisor_controller"
   supervisor TRUE
 }
