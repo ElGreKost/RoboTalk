@@ -10,3 +10,8 @@ Installation Steps
 ΠΡΟΣΟΧΗ: Για να λειτουργήσει με επιτυχία η εγκατάσταση πρέπει η python να είναι σε version <= 3.11
 Για να δείτε την έκδοση τρέχετε την παρακάτω εντολή στο terminal
 ```python3 --version```
+
+Controllers που θα χρησιμοποιήσουμε:
+- ppo_controller       : Διακριτά actions με την χρήση του PPO Agent
+- continuous_controller: Συνεχή actions με την χρήση του PPO Agent
+- imitation-robot      : Εκπαιδευμένο μοντέλο με την χρήση μεθόδων imitation
