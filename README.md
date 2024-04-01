@@ -6,6 +6,7 @@ Installation Steps
 3. Κάνουμε unzip
 4. Μέσω terminal, μεταφερόμαστε στον φάκελο "deepbots" που μόλις κατεβάσαμε (πχ. "cd ~/Downloads/Robotalk-main/deepbots")
 5. Εκτελούμε την εντολή "pip install ."
+
 ΠΡΟΣΟΧΗ: Για να λειτουργήσει με επιτυχία η εγκατάσταση πρέπει η python να είναι σε version <= 3.11
 Για να δείτε την έκδοση τρέχετε την παρακάτω εντολή στο terminal
 ```python3 --version```
