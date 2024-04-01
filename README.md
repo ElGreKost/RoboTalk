@@ -1,5 +1,5 @@
 Installation Steps
-1. Κατεβάστε Webots  (https://cyberbotics.com)
+1. Κατεβάζουμε Webots  (https://cyberbotics.com)
 2. Κατεβάζουμε το repo:
    a)Κάνουμε κλικ στο πράσινο κουμπί <>code
    b)Επιλέγουμε download zip
