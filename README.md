@@ -1,5 +1,5 @@
 Installation Steps
-1. Κατεβάστε Webots  (add link)
+1. Κατεβάστε Webots  (https://cyberbotics.com)
 2. Κατεβάστε το φάκελο Custom Deepbots (add link)
    a. Μέσα στον φάκελο που έχετε κατεβάσει το deepbots τρέξτε την παρακάτω εντολή
    * ```pip install .```
