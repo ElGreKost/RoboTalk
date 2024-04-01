@@ -60,7 +60,10 @@ class Drone(RobotSupervisorEnv):
         z = self.robot.getPosition()[2]
 
         # UNLEARN
-        reward = 100 if (np.abs(z - 1) < 0.03) else reward = 0
+        if (np.abs(z - 1) < 0.03):
+            reward = 100 
+        else:
+            reward = 0
 
         self.episode_score += reward
         return reward
