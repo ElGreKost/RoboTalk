@@ -34,13 +34,15 @@ class Drone(RobotSupervisorEnv):
         return [0.0 for _ in range(self.observation_space.shape[0])]
 
     def get_reward(self, action=None):
-        z = self.get_observations()[0]
+        reward = 0
 
-        # Run this on the pretrained
-        if(abs(z-1) < 0.03):
-            return 100
-        else:
-            return 0
+        z = self.get_observations()[0]
+        distance_from_goal = abs(z - 1)
+
+        if(distance_from_goal < 0.03):
+            reward += 100               # Reward for reaching goal
+
+        return reward
 
         # How to unlearn
         # if(abs(z-1) < 0.01):
