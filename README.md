@@ -1,7 +1,7 @@
-Installation Steps
+# Installation Steps
 1. Κατεβάζουμε Webots  [Webots Download](https://cyberbotics.com)
-2. Κατεβάζουμε το repo:
-   a)Κάνουμε κλικ στο πράσινο κουμπί <>code
+2. Κατεβάζουμε το repository ακολουθώντας τα παρακάτω βήματα:  
+   a)Κάνουμε κλικ στο πράσινο κουμπί <>code  
    b)Επιλέγουμε download zip
 3. Κάνουμε unzip
 4. Μέσω terminal, μεταφερόμαστε στον φάκελο "deepbots" που μόλις κατεβάσαμε (πχ. ```cd ~/Downloads/Robotalk-main/deepbots```)
