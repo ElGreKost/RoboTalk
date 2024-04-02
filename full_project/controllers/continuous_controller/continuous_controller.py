@@ -119,7 +119,7 @@ total_count = 0
 total_episodes = 0
 max_episode_steps = sub_batch_size
 t0 = time.time()
-collector.load_state_dict(th.load('weights/pretrained_simple.pt'))
+collector.load_state_dict(th.load('weights/pretrained_super.pt'))
 
 for i, tensordict_data in enumerate(collector):  # len(tensordict_data) = frames_per_batch
     print('max episode steps', max_episode_steps)
