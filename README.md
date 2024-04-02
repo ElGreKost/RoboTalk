@@ -10,7 +10,9 @@
 
 ΠΡΟΣΟΧΗ: Για να λειτουργήσει με επιτυχία η εγκατάσταση πρέπει η python να είναι σε version <= 3.11
 Για να δείτε την έκδοση τρέχετε την παρακάτω εντολή στο terminal
-```python3 --version```
+```python3 --version```  
+
+Για να γράψουμε κώδικα προτείνουμε το πρόγραμμα PyCharm ή Visual Studio Code  
 
 Controllers που θα χρησιμοποιήσουμε:
 - ppo_controller       : Διακριτά actions με την χρήση του PPO Agent
