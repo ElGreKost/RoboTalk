@@ -18,7 +18,7 @@ Controllers που θα χρησιμοποιήσουμε:
 
 
 # Εγκατάσταση Python 3.11
-Σε περίπτωση που έχετε την έκδοση 3.12
+Σε περίπτωση που έχετε την έκδοση 3.12 (Για Windows)
 
 Ανοίξτε τον παρακάτω σύνδεσμο: [Python 3.11.8 Download](https://www.python.org/downloads/release/python-3118/)
 
