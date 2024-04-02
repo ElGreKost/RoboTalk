@@ -12,7 +12,7 @@
 Για να δείτε την έκδοση τρέχετε την παρακάτω εντολή στο terminal
 ```python3 --version```  
 
-Για να γράψουμε κώδικα προτείνουμε το πρόγραμμα PyCharm ή Visual Studio Code  
+Για να γράψουμε κώδικα προτείνουμε το πρόγραμμα PyCharm ή το  Visual Studio Code  
 
 Controllers που θα χρησιμοποιήσουμε:
 - ppo_controller       : Διακριτά actions με την χρήση του PPO Agent
