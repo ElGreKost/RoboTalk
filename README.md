@@ -8,7 +8,7 @@
         a)Κάνουμε κλικ στο πράσινο κουμπί που βρίσκεται πιο πάνω στην σελίδα:  
     <a href="https://github.com/ElGreKost/RoboTalk"><img src="images/Code.png" alt="GitHub Code Button" width=100></a>  
         b)Επιλέγουμε download zip
-4. Κάνουμε unzip
+4. Κάνουμε unzip το zipped αρχείο που μόλις κατεβάσαμε "Robotalk-main.zip"
 5. Μετά το unzip πρέπει να βλέπουμε τον φάκελο "Robotalk-main". Εντός αυτού υπάρχει ένας ακόμα φάκελος "deepbots". Θέλουμε μέσω terminal να μεταφερθούμε σε αυτόν τον φάκελο "deepbots", χρησιμοποιώντας την εντολή ```cd <path_to_deepbots_folder>``` . (πχ. ```cd ~/Downloads/Robotalk-main/deepbots```)
 6. Βεβαιωνόμαστε ότι βρισκόμαστε στο "deepbots" folder εκτελώντας την εντολή ```pwd``` που μας εμφανίζει το directory στο οποίο βρισκόμαστε.
 7. Εκτελούμε την εντολή ```pip install .```  βρισκόμενοι εντός του φακέλου "deepbots"  
