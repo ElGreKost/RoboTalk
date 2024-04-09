@@ -44,7 +44,7 @@ Controllers που θα χρησιμοποιήσουμε:
 
 **2.** Αφού κατεβάσετε τον installer, κάντε διπλό κλικ πάνω του για να το τρέξετε. Ακολουθήστε τα παρακάτω βήματα.  
 <div style="text-align:center;">
-    <img src="images/image2.PNG" alt="Image_02" width="800" height="800">
+    <img src="images/image2.PNG" alt="Image_02" width="800">
 </div>
 
 
