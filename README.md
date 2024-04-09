@@ -36,7 +36,7 @@ Controllers που θα χρησιμοποιήσουμε:
 
 **1.** Βρείτε και κατεβάστε τον κατάλληλο installer της Python 3.11.8.  
     
-<img src="images/image1.PNG" alt="Image_01" width=500>
+<img src="images/image1.PNG" alt="Image_01" width=800>
 Συνήθως, για Windows, ο κατάλληλος installer είναι ο **Windows installer (64-bit)**. Μπορείτε να ελέγξετε τον τύπο του συστήματός σας ανοίγοντας τις ρυθμίσεις των Windows και πηγαίνοντας στο **System > About**.
 
 **2.** Αφού κατεβάσετε τον installer, κάντε διπλό κλικ πάνω του για να το τρέξετε. Ακολουθήστε τα παρακάτω βήματα.  
