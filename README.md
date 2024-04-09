@@ -71,8 +71,8 @@ Controllers που θα χρησιμοποιήσουμε:
       </a>
     </td>
     <td align="center">
-      <a href="https://github.com/AlexGeorgantzas.png">
-        <img src="images/alex_photo.JPG" alt="Contributor 3" width="100"/>
+      <a href="https://github.com/AlexGeorgantzas">
+        <img src="https://github.com/AlexGeorgantzas.png" alt="Contributor 3" width="100"/>
         <br>
         <strong>Georgios Alexandros Georgantzas</strong>
       </a>
