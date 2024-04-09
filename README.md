@@ -54,5 +54,5 @@ Controllers που θα χρησιμοποιήσουμε:
 
 ## Contributors
 
-![Contributor 1](images/alex_photo.JPG)
+<img src="images/alex_photo.JPG" alt="Contributor 1" width="100"/> <br>
 ** Georgios Alexandros Georgantzas **  
