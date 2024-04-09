@@ -36,11 +36,17 @@ Controllers που θα χρησιμοποιήσουμε:
 
 **1.** Βρείτε και κατεβάστε τον κατάλληλο installer της Python 3.11.8.  
     
-<img src="images/image1.PNG" alt="Image_01" width=800 height=400>
+<div style="text-align:center;">
+    <img src="images/image1.PNG" alt="Image_01" width="800">
+</div>
+
 Συνήθως, για Windows, ο κατάλληλος installer είναι ο **Windows installer (64-bit)**. Μπορείτε να ελέγξετε τον τύπο του συστήματός σας ανοίγοντας τις ρυθμίσεις των Windows και πηγαίνοντας στο **System > About**.
 
 **2.** Αφού κατεβάσετε τον installer, κάντε διπλό κλικ πάνω του για να το τρέξετε. Ακολουθήστε τα παρακάτω βήματα.  
-<img src="images/image2.PNG" alt="Image_02" width=800 height=400>
+<div style="text-align:center;">
+    <img src="images/image2.PNG" alt="Image_02" width="800" height="800">
+</div>
+
 
 **3.** Για να επιβεβαιώσετε ότι η εγκατάσταση ήταν επιτυχής, ανοίξτε το PowerShell και εκτελέστε τις παρακάτω εντολές: 
     ```python --version```
