@@ -1,3 +1,7 @@
+# NEXT-GEN PILOTS: AI ENHANCED DRONES IN ACTION  
+
+# Workshop on Reinforcement Learning for Drone Control using Webots, Torch, and Gym
+
 # Installation Steps
 1. Κατεβάζουμε Webots [Webots Download](https://cyberbotics.com)
 2. Κατεβάζουμε το repository ακολουθώντας τα παρακάτω βήματα:  
