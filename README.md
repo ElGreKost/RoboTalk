@@ -58,20 +58,20 @@ Controllers που θα χρησιμοποιήσουμε:
   <tr>
     <td align="center">
       <a href="https://github.com/ElGreKost">
-        <img src="images/kwstis_photo.JPG" alt="Contributor 1" width="100"/>
+        <img src="https://github.com/ElGreKost.JPG" alt="Contributor 1" width="100"/>
         <br>
         <strong>Kwstis Kakkavas</strong>
       </a>
     </td>
     <td align="center">
       <a href="https://github.com/dimpap5555">
-        <img src="images/jim_photo.JPG" alt="Contributor 2" width="100"/>
+        <img src="https://github.com/dimpap5555.JPG" alt="Contributor 2" width="100"/>
         <br>
         <strong>Jim Pap</strong>
       </a>
     </td>
     <td align="center">
-      <a href="https://github.com/AlexGeorgantzas">
+      <a href="https://github.com/AlexGeorgantzas.png">
         <img src="images/alex_photo.JPG" alt="Contributor 3" width="100"/>
         <br>
         <strong>Georgios Alexandros Georgantzas</strong>
