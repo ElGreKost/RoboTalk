@@ -59,7 +59,9 @@ Controllers που θα χρησιμοποιήσουμε:
 Αυτή η εντολή θα επιστρέψει το μονοπάτι στο οποίο είναι αποθηκευμένη η Python.
 
 **5.** Στη συνέχεια, στη γραμμή αναζήτησης των Windows, αναζητήστε **Edit System Environment Variables**. Πατήστε το **Environment Variables**  
-    ![Εικόνα 3](images/image3.PNG)  
+<div style="text-align:center;">
+    <img src="images/image3.PNG" alt="Image_03">
+</div>
 Στο System Variables, αναζητήστε τη μεταβλητή **Path**, επιλέξτε την και πατήστε **Edit**  
     ![Εικόνα 4](images/image4.PNG)  
 Στη συνέχεια, πατήστε **New** και εισάγετε το μονοπάτι που επιστράφηκε από το βήμα 4.
