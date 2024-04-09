@@ -4,15 +4,18 @@
         a)Κάνουμε κλικ στο πράσινο κουμπί που βρίσκεται πιο πάνω στην σελίδα:  
     <a href="https://github.com/ElGreKost/RoboTalk"><img src="images/Code.png" alt="GitHub Code Button" width=100></a>  
         b)Επιλέγουμε download zip
-4. Κάνουμε unzip 
-5. Μέσω terminal, μεταφερόμαστε στον φάκελο "deepbots" που μόλις κατεβάσαμε (πχ. ```cd ~/Downloads/Robotalk-main/deepbots```)
-6. Εκτελούμε την εντολή ```pip install .```  
+4. Κάνουμε unzip
+5. Μετά το unzip πρέπει να βλέπουμε τον φάκελο "Robotalk-main". Εντός αυτού υπάρχει ένας ακόμα φάκελος "deepbots". Θέλουμε μέσω terminal να μεταφερθούμε σε αυτόν τον φάκελο "deepbots", χρησιμοποιώντας την εντολή cd <path_to_deepbots_folder>. (πχ. ```cd ~/Downloads/Robotalk-main/deepbots```)
+6. Βεβαιωνόμαστε ότι βρισκόμαστε στο "deepbots" folder εκτελώντας την εντολή ```pwd``` που μας εμφανίζει το directory στο οποίο βρισκόμαστε.
+7. Εκτελούμε την εντολή ```pip install .```  βρισκόμενοι εντός του φακέλου "deepbots"  
 
 ΠΡΟΣΟΧΗ: Για να λειτουργήσει με επιτυχία η εγκατάσταση πρέπει η python να είναι σε version <= 3.11
 Για να δείτε την έκδοση τρέχετε την παρακάτω εντολή στο terminal
-```python3 --version```  
+```python3 --version```  ή ```python --version``` ή ```py --version```  
 
 Για να γράψουμε κώδικα προτείνουμε το πρόγραμμα PyCharm ή το  Visual Studio Code  
+
+Πληροφορίες σχετικά με το workshop:  
 
 Controllers που θα χρησιμοποιήσουμε:
 - ppo_controller       : Διακριτά actions με την χρήση του PPO Agent
@@ -20,7 +23,7 @@ Controllers που θα χρησιμοποιήσουμε:
 - imitation-robot      : Εκπαιδευμένο μοντέλο με την χρήση μεθόδων imitation
 
 
-# Εγκατάσταση Python 3.11
+# Εγκατάσταση Python 3.11 (Windows)
 Σε περίπτωση που έχετε την έκδοση 3.12 (Για Windows)
 
 Ανοίξτε τον παρακάτω σύνδεσμο: [Python 3.11.8 Download](https://www.python.org/downloads/release/python-3118/)  
