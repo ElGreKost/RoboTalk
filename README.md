@@ -8,17 +8,16 @@
         a)Κάνουμε κλικ στο πράσινο κουμπί που βρίσκεται πιο πάνω στην σελίδα:  
     <a href="https://github.com/ElGreKost/RoboTalk"><img src="images/Code.png" alt="GitHub Code Button" width=100></a>  
         b)Επιλέγουμε download zip
-4. Κάνουμε unzip το zipped αρχείο που μόλις κατεβάσαμε "Robotalk-main.zip"
-5. Μετά το unzip πρέπει να βλέπουμε τον φάκελο "Robotalk-main". Εντός αυτού υπάρχει ένας ακόμα φάκελος "deepbots". Θέλουμε μέσω terminal να μεταφερθούμε σε αυτόν τον φάκελο "deepbots", χρησιμοποιώντας την εντολή ```cd <path_to_deepbots_folder>``` . (πχ. ```cd ~/Downloads/Robotalk-main/deepbots```)
-6. Βεβαιωνόμαστε ότι βρισκόμαστε στο "deepbots" folder εκτελώντας την εντολή ```pwd``` που μας εμφανίζει το directory στο οποίο βρισκόμαστε.
-7. Εκτελούμε την εντολή ```pip install .```  βρισκόμενοι εντός του φακέλου "deepbots"  
+3. Κάνουμε unzip το zipped αρχείο που μόλις κατεβάσαμε "Robotalk-main.zip"
+4. Μετά το unzip πρέπει να βλέπουμε τον φάκελο "Robotalk-main". Εντός αυτού υπάρχει ένας ακόμα φάκελος "deepbots". Θέλουμε μέσω terminal να μεταφερθούμε σε αυτόν τον φάκελο "deepbots", χρησιμοποιώντας την εντολή ```cd <path_to_deepbots_folder>``` . (πχ. ```cd ~/Downloads/Robotalk-main/deepbots```)
+5. Εκτελούμε την εντολή ```pip install .```  βρισκόμενοι εντός του φακέλου "deepbots"  
 
 ΠΡΟΣΟΧΗ:   
 1. Για να λειτουργήσει με επιτυχία η εγκατάσταση πρέπει η python να είναι σε version &lt;= 3.11
 Για να δείτε την έκδοση τρέχετε την παρακάτω εντολή στο terminal
 ```python3 --version```  ή ```python --version``` ή ```py --version```
-2. Βεβαιωθείτε στο βήμα 5 πως όταν κάνετε ```cd <path_to_deepbots_folder>``` το <path_to_deepbots_folder> δεν συμπεριλαμβάνει το zip φάκελο εντός του διότι αλλιώς δεν θα δουλέψει η εντολή. (πχ. δεν είναι κάτι τέτοιο: ```~/Downloads/Robotalk-main.zip/Robotalk-main/deepbots```)  
-3. Πρωτού το βήμα 6, βεβαιωθείτε ότι βρίσκεστε στο "deepbots" folder εκτελώντας την εντολή ```pwd``` που εμφανίζει το directory στο οποίο βρίσκεστε.  
+2. Βεβαιωθείτε στο βήμα 4 πως όταν κάνετε ```cd <path_to_deepbots_folder>``` το <path_to_deepbots_folder> δεν συμπεριλαμβάνει το zip φάκελο εντός του διότι αλλιώς δεν θα δουλέψει η εντολή. (πχ. δεν είναι κάτι τέτοιο: ```~/Downloads/Robotalk-main.zip/Robotalk-main/deepbots```)  
+3. Πρωτού το βήμα 5, βεβαιωθείτε ότι βρίσκεστε στο "deepbots" folder εκτελώντας την εντολή ```pwd``` που εμφανίζει το directory στο οποίο βρίσκεστε.  
 
 Για να γράψουμε κώδικα προτείνουμε το πρόγραμμα PyCharm ή το  Visual Studio Code  
 
