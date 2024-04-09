@@ -54,5 +54,29 @@ Controllers που θα χρησιμοποιήσουμε:
 
 ## Contributors
 
-<img src="images/alex_photo.JPG" alt="Contributor 1" width="100"/> <br>
-** Georgios Alexandros Georgantzas **  
+<table>
+  <tr>
+    <td align="center">
+      <a href="https://github.com/ElGreKost">
+        <img src="images/kwstis_photo.JPG" alt="Contributor 1" width="100"/>
+        <br>
+        <strong>Kwstis Kakkavas</strong>
+      </a>
+    </td>
+    <td align="center">
+      <a href="https://github.com/dimpap5555">
+        <img src="images/jim_photo.JPG" alt="Contributor 2" width="100"/>
+        <br>
+        <strong>Jim Pap</strong>
+      </a>
+    </td>
+    <td align="center">
+      <a href="https://github.com/AlexGeorgantzas">
+        <img src="images/alex_photo.JPG" alt="Contributor 3" width="100"/>
+        <br>
+        <strong>Georgios Alexandros Georgantzas</strong>
+      </a>
+    </td>
+  </tr>
+</table>
+
