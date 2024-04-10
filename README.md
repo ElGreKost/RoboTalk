@@ -78,14 +78,14 @@ Controllers που θα χρησιμοποιήσουμε:
       <a href="https://github.com/ElGreKost">
         <img src="https://github.com/ElGreKost.png" alt="Contributor 1" width="100"/>
         <br>
-        <strong>Kwstis Kakkavas</strong>
+        <strong>P. Konstantinos Kakkavas</strong>
       </a>
     </td>
     <td align="center">
       <a href="https://github.com/dimpap5555">
         <img src="https://github.com/dimpap5555.png" alt="Contributor 2" width="100"/>
         <br>
-        <strong>Jim Pap</strong>
+        <strong>Dimitrios Papageorgiou</strong>
       </a>
     </td>
     <td align="center">
